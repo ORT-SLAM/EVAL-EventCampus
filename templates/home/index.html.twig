@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ pageName }}{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <h1 class="mb-0">Accueil</h1>
+    </div>
+
+    {% if ongoingEvents and ongoingEvents|length > 0 %}
+        <section class="mb-5">
+            <h2 class="h4 mb-3">En cours</h2>
+            <div class="row g-4">
+                {% for event in ongoingEvents %}
+                    <div class="col-12 col-sm-6 col-lg-4 col-xxl-3 d-flex">
+                        {% include 'components/card.html.twig' %}
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+
+    <section>
+        <div class="d-flex align-items-baseline gap-2 mb-3">
+            <h2 class="h4 mb-0">À venir</h2>
+            <span class="text-muted small">({{ upcomingEvents|default([])|length }})</span>
+        </div>
+        {% if upcomingEvents and upcomingEvents|length > 0 %}
+            <div class="row g-4">
+                {% for event in upcomingEvents %}
+                    <div class="col-12 col-sm-6 col-lg-4 col-xxl-3 d-flex">
+                        {% include 'components/card.html.twig' %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted">Aucun événement à venir pour le moment.</p>
+        {% endif %}
+    </section>
+
+{% endblock %}

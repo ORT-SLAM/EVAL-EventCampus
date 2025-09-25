@@ -1,0 +1,107 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ pageName }}{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+        <h1 class="h3 mb-0">Statistiques</h1>
+        <a href="{{ path('app_events') }}" class="btn btn-outline-secondary">← Voir les événements</a>
+    </div>
+
+    {% set openPercent = nbEvents > 0 ? ((nbOpenEvents / nbEvents) * 100) : 0 %}
+
+    <div class="row g-4 mb-4">
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center">
+                    <div class="text-muted mb-2">Total</div>
+                    <div class="display-5 fw-semibold">{{ nbEvents }}</div>
+                    <div class="small text-muted">Événements</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="text-muted">Ouverts</div>
+                        <span class="badge text-bg-success">{{ nbOpenEvents }}</span>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ openPercent|round }}%;" aria-valuenow="{{ openPercent|round }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="small text-muted mt-2">{{ openPercent|round }}%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% set festifPercent = nbEvents > 0 ? ((nbFestifEvents / nbEvents) * 100) : 0 %}
+    {% set associatifPercent = nbEvents > 0 ? ((nbAssociatifEvents / nbEvents) * 100) : 0 %}
+    {% set culturePercent = nbEvents > 0 ? ((nbCultureEvents / nbEvents) * 100) : 0 %}
+    {% set sportPercent = nbEvents > 0 ? ((nbSportEvents / nbEvents) * 100) : 0 %}
+
+    <h2 class="h5 mb-3">Répartition par catégorie</h2>
+    <div class="row g-4">
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fw-semibold">Festif</span>
+                        <span class="badge text-bg-primary">{{ nbFestifEvents }}</span>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: {{ festifPercent|round }}%;" aria-valuenow="{{ festifPercent|round }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="small text-muted mt-2">{{ festifPercent|round }}%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fw-semibold">Associatif</span>
+                        <span class="badge text-bg-warning">{{ nbAssociatifEvents }}</span>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: {{ associatifPercent|round }}%;" aria-valuenow="{{ associatifPercent|round }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="small text-muted mt-2">{{ associatifPercent|round }}%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fw-semibold">Culturel</span>
+                        <span class="badge text-bg-info">{{ nbCultureEvents }}</span>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: {{ culturePercent|round }}%;" aria-valuenow="{{ culturePercent|round }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="small text-muted mt-2">{{ culturePercent|round }}%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fw-semibold">Sportif</span>
+                        <span class="badge text-bg-success">{{ nbSportEvents }}</span>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ sportPercent|round }}%;" aria-valuenow="{{ sportPercent|round }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="small text-muted mt-2">{{ sportPercent|round }}%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
