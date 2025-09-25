@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} EC - {{ event.titre }} {% endblock %}
+
+{% block body %}
+    <div class="mb-4">
+        <a href="{{ path('app_events') }}" class="btn btn-outline-secondary btn-sm">← Retour à la liste</a>
+    </div>
+
+    <div class="card border-0 shadow-sm overflow-hidden">
+        <img src="https://picsum.photos/seed/{{ event.id }}/1200/400" class="w-100" alt="{{ event.titre }}" style="height: 260px; object-fit: cover;">
+        <div class="card-body p-4">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+                {% set statusClass = event.statut == 'ouvert' ? 'success' : 'secondary' %}
+                {% set categoryColors = {'festif':'danger','associatif':'primary','sportif':'success','culturel':'warning'} %}
+                {% set catClass = categoryColors[event.categorie]|default('secondary') %}
+                <div class="d-flex gap-2">
+                    <span class="badge text-bg-{{ catClass }}">{{ event.categorie|capitalize }}</span>
+                    <span class="badge text-bg-{{ statusClass }}">{{ event.statut == 'ouvert' ? 'Ouvert' : 'Fermé' }}</span>
+                </div>
+                <div>
+                    <span class="badge rounded-pill text-bg-primary">ID #{{ event.id }}</span>
+                </div>
+            </div>
+
+            <h1 class="h3 mb-3">{{ event.titre }}</h1>
+
+            <p class="text-muted">{{ event.description }}</p>
+
+            <div class="row g-4 mt-1">
+                <div class="col-md-6">
+                    <div class="border rounded p-3 h-100">
+                        <h2 class="h6 text-uppercase text-muted mb-3">Informations</h2>
+                        <ul class="list-unstyled mb-0 small">
+                            <li class="mb-2"><span class="me-2">📅</span>Du <strong>{{ event.date_debut|date('d/m/Y H:i') }}</strong> au <strong>{{ event.date_fin|date('d/m/Y H:i') }}</strong></li>
+                            <li class="mb-2"><span class="me-2">📍</span>Lieu: <strong>{{ event.lieu }}</strong></li>
+                            <li class="mb-2"><span class="me-2">👤</span>Organisateur: <strong>{{ event.organisateur }}</strong></li>
+                            <li class="mb-2"><span class="me-2">💶</span>Prix: <strong>{% if event.prix == 0 %}Gratuit{% else %}{{ event.prix|number_format(2, ',', ' ') }} €{% endif %}</strong></li>
+                            <li class="mb-2"><span class="me-2">🏷️</span>Catégorie: <strong>{{ event.categorie|capitalize }}</strong></li>
+                            <li class="mb-2"><span class="me-2">🔓</span>Statut: <strong>{{ event.statut == 'ouvert' ? 'Ouvert' : 'Fermé' }}</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="border rounded p-3 h-100">
+                        <h2 class="h6 text-uppercase text-muted mb-3">Capacité</h2>
+                        {% set total = event.places_totales %}
+                        {% set disponibles = event.places_disponibles %}
+                        {% set percent = total > 0 ? ((disponibles / total) * 100)|round(0, 'floor') : 0 %}
+                        <div class="d-flex justify-content-between small mb-2">
+                            <span>Places disponibles</span>
+                            <span><strong>{{ disponibles }}</strong> / {{ total }}</span>
+                        </div>
+                        <div class="progress" role="progressbar" aria-valuenow="{{ percent }}" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-bar bg-{{ statusClass }}" style="width: {{ percent }}%"></div>
+                        </div>
+                        <div class="text-end small text-muted mt-2">{{ percent }}%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex gap-2">
+                <a href="{{ path('app_events') }}" class="btn btn-outline-secondary">Retour</a>
+                <button class="btn btn-primary" {% if event.statut != 'ouvert' %}disabled{% endif %}>S'inscrire</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

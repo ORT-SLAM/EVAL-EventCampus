@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ pageName }}{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-4 border-bottom">
+        <h1>Liste des événements</h1>
+        <form id="filterForm" class="d-flex align-items-center" method="get" action="{{ path('app_events') }}">
+            <label for="category" class="form-label me-2 mb-0">Filtrer par catégorie :</label>
+            {% set currentCategory = category|default('all') %}
+            <select id="category" name="category" class="form-select me-2" style="width: 200px;" onchange="this.form.submit()">
+                <option value="" {{ currentCategory in ['', 'all'] ? 'selected' }}>Toutes</option>
+                <option value="festif" {{ currentCategory == 'festif' ? 'selected' }}>Festif</option>
+                <option value="associatif" {{ currentCategory == 'associatif' ? 'selected' }}>Associatif</option>
+                <option value="sportif" {{ currentCategory == 'sportif' ? 'selected' }}>Sportif</option>
+                <option value="culturel" {{ currentCategory == 'culturel' ? 'selected' }}>Culturel</option>
+            </select>
+            <noscript>
+                <button type="submit" class="btn btn-primary ms-2">Filtrer</button>
+            </noscript>
+        </form>
+    </div>
+
+    <div class="row g-4 mx-5 gap-3 mt-2">
+      {% for event in events %}
+        {% include 'components/card.html.twig' %}
+      {% else %}
+        <p>Aucun event n’a été trouvé</p>
+      {% endfor %}
+	  </div>
+{% endblock %}
