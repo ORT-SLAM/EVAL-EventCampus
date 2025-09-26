@@ -4,12 +4,44 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class ApiController extends AbstractController
 {
     #[Route('/api/events', name: 'api_events')]
-    public function events(): JsonResponse{
+    public function events(Request $request): JsonResponse {
+        $filteredEvents = [];
+        $cat = $request->query->get('categorie');
+        $access = $request->query->get('acces');
+        $acceptedCat = ['culturel', 'festif', 'associatif', 'sportif'];
+
+        if (in_array($cat, $acceptedCat)) {
+            foreach (HomeController::getEvents() as $event) {
+                if ($event['categorie'] === $cat) {
+                    if ($access === "gratuit") {
+                        if ($event['prix'] == 0) {
+                            $filteredEvents[] = $event;
+                        }
+                    }
+                    else if ($access === "payant") {
+                        if ($event['prix'] >= 1) {
+                            $filteredEvents[] = $event;
+                        }
+                    }
+                    else {
+                        $filteredEvents[] = $event;
+                    }
+                }
+            }
+        } else {
+            return new JsonResponse(['error' => "categorie not found"]);
+        }
+
+        if ($filteredEvents) {
+            return new JsonResponse($filteredEvents);
+        }
+
         return new JsonResponse(HomeController::getEvents());
     }
 
